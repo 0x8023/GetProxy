@@ -1,0 +1,30 @@
+{
+    "kuai": {
+        "cn_transparent": {
+            "url": "http://www.kuaidaili.com/free/intr/{0}/"
+        },
+        "cn_anonymous": {
+            "url": "http://www.kuaidaili.com/free/inha/{0}/"
+        },
+        "intl_transparent": {
+            "url": "http://www.kuaidaili.com/free/outtr/{0}/"
+        },
+        "intl_anonymous": {
+            "url": "http://www.kuaidaili.com/free/outha/{0}/"
+        }
+    },
+    "xici": {
+        "cn_transparent": {
+            "url": "http://www.xicidaili.com/nt/{0}"
+        },
+        "cn_anonymous": {
+            "url": "http://www.xicidaili.com/nn/{0}"
+        },
+        "intl_transparent": {
+            "url": "http://www.xicidaili.com/wt/{0}"
+        },
+        "intl_anonymous": {
+            "url": "http://www.xicidaili.com/wn/{0}"
+        }
+    }
+}
