@@ -1,6 +1,8 @@
 {
     "kuai": {
         "re": "(?<=\"IP\">){host}(?:</td>.*?\"PORT\">){port}(?:</td>.*?\"类型\">){scheme}(?=</td>)",
+        "maxpage": "(?:/\">){maxpage}(?=</a></li><li>页</li></ul>)",
+
         "cn_transparent":    "http://www.kuaidaili.com/free/intr/{0}/",
         "cn_anonymous":      "http://www.kuaidaili.com/free/inha/{0}/",
         "intl_transparent":  "http://www.kuaidaili.com/free/outtr/{0}/",
@@ -8,6 +10,8 @@
     },
     "xici": {
         "re": "(?<=<td>){host}(?:</td>.*?<td>){port}(?:</td>.*?<td>){scheme}(?=</td>)",
+        "maxpage": "",
+
         "cn_transparent":    "http://www.xicidaili.com/nt/{0}",
         "cn_anonymous":      "http://www.xicidaili.com/nn/{0}",
         "intl_transparent":  "http://www.xicidaili.com/wt/{0}",

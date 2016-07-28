@@ -14,7 +14,8 @@ class GetProxy(object):
         #built-in regular
         self.scheme = r'(?P<scheme>https?|HTTPS?)'
         self.host = r'(?P<host>(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3})'
-        self.port = r'(?P<port>\d*)'
+        self.port = r'(?P<port>\d{1,5})'
+        self.maxpage = r'(?P<maxpage>\d{1,6})'
         #requests headers
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36',
@@ -24,47 +25,28 @@ class GetProxy(object):
         with open('Data.json', 'r') as f:
             self.data = json.load(f)
 
-    def get_url(self, visibility = 'all', pattern = 'all'):
-        url = []
-        #都不介意
-        if visibility == self.all and pattern == self.all:
-            pass
-        #不介意其中一项
-        elif visibility == self.all or pattern == self.all:
-            #如果不介意提供商
-            if visibility == self.all:
-                for x in self.data.values():
-                    url += [x[pattern]['url']]
-            #如果不介意国别和透明度
-            elif pattern == self.all:
-                for x in proxies.data[visibility].values():
-                    url += [x['url']]
-        #
-        else:
-            url += self.data[visibility][pattern]['url']
-        print(url)
+    # def get_proxies(self, num, provider, pattern):
+    #     l = []
+    #     for x in get_html(provider, pattern):
+    #         for y in get_url(x, provider):
+    #             l += y
+    #             if len(l) >= num:
+    #                 return l
 
-    def get_html(self):
-        pass
+    def get_url(self, provider, pattern, html):
+        for x in re.finditer(r[provider]['re'].format(scheme = self.scheme, host = self.host, port = self.port), html, re.S):
+            print(x.group('scheme').lower() + '://' + x.group('host') + ':' + x.group('port'))
 
-    # def fetch_url(self):
-    #     pass
+    def get_html(self, provider, pattern, page):
+        return requests.get(self.data[provider][pattern].format(page), headers = self.headers).text
 
+    def get_maxpage(self, provider, html):
+        return int(re.search(self.data[provider]['maxpage'].format(maxpage = self.maxpage), html, re.S).group('maxpage'))
 
 if __name__ == '__main__':
-    ss = r'(?P<scheme>https?|HTTPS?)'
-    sh = r'(?P<host>(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3})'
-    sp = r'(?P<port>\d*)'
+    proxies = GetProxy()
+    print(proxies.get_maxpage('kuai', proxies.get_html('kuai', 'cn_transparent', 1)))
 
-    header = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36',
-        }
-    html = requests.get('http://www.kuaidaili.com/free/intr/', headers = header)
-
-    with open('Data.json', 'r') as f:
-        r = json.load(f)
-        for x in re.finditer(r['kuai']['re'].format(scheme = ss, host = sh, port = sp), html.text, re.S):
-            print(x.group('scheme').lower() + '://' + x.group('host') + ':' + x.group('port'))
     # print(html.text)
 
     # proxies = GetProxy();
