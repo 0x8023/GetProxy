@@ -6,35 +6,42 @@
 
 import requests
 import json
+import re
 
 class GetProxy(object):
     """docstring for GetProxy"""
     def __init__(self):
-        self.all = 'all'
-
-        self.ca = 'cn_anonymous'
-        self.ct = 'cn_transparent'
-        self.ia = 'intl_anonymous'
-        self.it = 'intl_transparent'
+        #built-in regular
+        self.scheme = r'(?P<scheme>https?|HTTPS?)'
+        self.host = r'(?P<host>(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3})'
+        self.port = r'(?P<port>\d*)'
         #requests headers
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36',
         }
+
         #read json
         with open('Data.json', 'r') as f:
             self.data = json.load(f)
 
     def get_url(self, visibility = 'all', pattern = 'all'):
         url = []
-        if visibility == self.all: #如果不介意提供商
-            for x in self.data.values():
-                url += [x[pattern]['url']]
-
-        if pattern == self.all: #如果不介意国别和透明度
-            for x in proxies.data[visibility].values():
-                url += [x['url']]
-
-        # url += self.data[visibility][pattern]['url']
+        #都不介意
+        if visibility == self.all and pattern == self.all:
+            pass
+        #不介意其中一项
+        elif visibility == self.all or pattern == self.all:
+            #如果不介意提供商
+            if visibility == self.all:
+                for x in self.data.values():
+                    url += [x[pattern]['url']]
+            #如果不介意国别和透明度
+            elif pattern == self.all:
+                for x in proxies.data[visibility].values():
+                    url += [x['url']]
+        #
+        else:
+            url += self.data[visibility][pattern]['url']
         print(url)
 
     def get_html(self):
@@ -45,10 +52,24 @@ class GetProxy(object):
 
 
 if __name__ == '__main__':
-    # r = requests.get('http://www.xicidaili.com/nn/')
-    # print(r.text)
-    proxies = GetProxy();
-    proxies.get_url(pattern = proxies.ca);
+    ss = r'(?P<scheme>https?|HTTPS?)'
+    sh = r'(?P<host>(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3})'
+    sp = r'(?P<port>\d*)'
+
+    header = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36',
+        }
+    html = requests.get('http://www.kuaidaili.com/free/intr/', headers = header)
+
+    with open('Data.json', 'r') as f:
+        r = json.load(f)
+        for x in re.finditer(r['kuai']['re'].format(scheme = ss, host = sh, port = sp), html.text, re.S):
+            print(x.group('scheme').lower() + '://' + x.group('host') + ':' + x.group('port'))
+    # print(html.text)
+
+    # proxies = GetProxy();
+    # proxies.get_url(pattern = proxies.ca);
+
 
         # print(v)
         # v[cn_anonymous]

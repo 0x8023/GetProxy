@@ -1,30 +1,16 @@
 {
     "kuai": {
-        "cn_transparent": {
-            "url": "http://www.kuaidaili.com/free/intr/{0}/"
-        },
-        "cn_anonymous": {
-            "url": "http://www.kuaidaili.com/free/inha/{0}/"
-        },
-        "intl_transparent": {
-            "url": "http://www.kuaidaili.com/free/outtr/{0}/"
-        },
-        "intl_anonymous": {
-            "url": "http://www.kuaidaili.com/free/outha/{0}/"
-        }
+        "re": "(?<=\"IP\">){host}(?:</td>.*?\"PORT\">){port}(?:</td>.*?\"类型\">){scheme}(?=</td>)",
+        "cn_transparent":    "http://www.kuaidaili.com/free/intr/{0}/",
+        "cn_anonymous":      "http://www.kuaidaili.com/free/inha/{0}/",
+        "intl_transparent":  "http://www.kuaidaili.com/free/outtr/{0}/",
+        "intl_anonymous":    "http://www.kuaidaili.com/free/outha/{0}/"
     },
     "xici": {
-        "cn_transparent": {
-            "url": "http://www.xicidaili.com/nt/{0}"
-        },
-        "cn_anonymous": {
-            "url": "http://www.xicidaili.com/nn/{0}"
-        },
-        "intl_transparent": {
-            "url": "http://www.xicidaili.com/wt/{0}"
-        },
-        "intl_anonymous": {
-            "url": "http://www.xicidaili.com/wn/{0}"
-        }
+        "re": "(?<=<td>){host}(?:</td>.*?<td>){port}(?:</td>.*?<td>){scheme}(?=</td>)",
+        "cn_transparent":    "http://www.xicidaili.com/nt/{0}",
+        "cn_anonymous":      "http://www.xicidaili.com/nn/{0}",
+        "intl_transparent":  "http://www.xicidaili.com/wt/{0}",
+        "intl_anonymous":    "http://www.xicidaili.com/wn/{0}"
     }
 }
