@@ -26,18 +26,24 @@ class GetProxy(object):
             self.data = json.load(f)
 
     def get_url(self, provider, html):
-        l = []
         for x in re.finditer(self.data[provider]['re'].format(scheme = self.SCHEME, host = self.HOST, port = self.PORT), html, re.S):
-            l.append({x.group('scheme').lower(): x.group('scheme').lower() + '://' + x.group('host') + ':' + x.group('port')})
-        return (l)
+            yield {x.group('scheme').lower(): x.group('scheme').lower() + '://' + x.group('host') + ':' + x.group('port')}
 
     def get_html(self, provider, pattern, page):
         return requests.get(self.data[provider][pattern].format(page = page), headers = self.HEADERS).text
 
-    def get_maxpage(self, provider, html):
-        return int(re.search(self.data[provider]['maxpage'].format(maxpage = self.MAXPAGE), html, re.S).group('maxpage'))
+    def get_maxpage(self, provider, pattern):
+        return int(re.search(self.data[provider]['maxpage'].format(maxpage = self.MAXPAGE), self.get_html(provider, pattern, 1), re.S).group('maxpage'))
+
+    def get_proxy(self, provider, pattern, quantity):
+        num = 0
+        for x in range(1, self.get_maxpage(provider, pattern)):
+            for y in self.get_url(provider, self.get_html(provider, pattern, x)):
+                if num < quantity: yield y
+                else: return
+                num += 1
 
 if __name__ == '__main__':
     proxies = GetProxy()
-    print(proxies.get_maxpage('xici', proxies.get_html('xici', 'cn_transparent', 1)))
-    # print(proxies.get_url('kuai', proxies.get_html('kuai', 'cn_transparent', 1)))
+    for x in proxies.get_proxy('xici', 'cn_transparent', 100):
+        print(x)
