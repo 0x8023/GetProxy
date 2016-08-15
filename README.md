@@ -8,6 +8,7 @@
 ```python
 import GetProxy
 ```
+
 ---
 ### 使用
 1.在您需要获取代理的位置添加代码用以实例化对象:
@@ -33,6 +34,8 @@ proxies = GetProxy()
 for x in proxies.get_proxy('xici', 'cn_transparent', 100):
 	requests.get("http://8023.Moe", proxies=x)
 ```
+从西刺代理网获取100个国内透明代理, 并使用代理访问 http://8023.Moe
+
 ---
 ###贡献
 本模块分离了代码部分与配置部分, 通过读取配置文件读取url地址与正则表达式进行爬取.
@@ -52,6 +55,7 @@ Data.json 为UTF-8编码的json文件, 包含数个键为 provider 的数据.
 - pattern 应存储代理页面url地址, 
 如"cn_transparent"用于存储国内透明代理, "intl_anonymous"用来存取国际匿名代理.
 - url中页面部分请用 {page} 代替
+
 ---
 ###注:
 - 该模块未添加至pip库.
